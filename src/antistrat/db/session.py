@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import sessionmaker
 
 from antistrat.utils.logging_config import configure_logging
@@ -37,8 +38,15 @@ def init_db():
     from . import models as _models
 
     _ = _models
-    Base.metadata.create_all(bind=engine)
-    logger.info("Database schema initialized")
+    try:
+        Base.metadata.create_all(bind=engine, checkfirst=True)
+        logger.info("Database schema initialized")
+    except OperationalError as exc:
+        # Streamlit startup/import timing can race table creation on first boot.
+        if "already exists" in str(exc).lower():
+            logger.warning("Database schema already exists; continuing startup")
+            return
+        raise
 
 
 def reset_db():

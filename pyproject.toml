@@ -1,0 +1,50 @@
+# pyproject.toml
+[tool.poetry]
+name = "cs2-antistrat"
+version = "0.1.0"
+description = "Anti‑Strat tool for Counter‑Strike 2"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "antistrat", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+streamlit = "^1.35.0"
+demoparser2 = "^0.41.1"
+SQLAlchemy = "^2.0.30"
+pandas = "^2.2.0"
+numpy = "^1.26.0"
+altair = "^5.1.0"
+Pillow = "^10.2.0"
+pydantic = "^2.6.3"
+matplotlib = "^3.10.8"
+sentry-sdk = "^2.35.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+black = "^24.3.0"
+ruff = "^0.4.2"
+pre-commit = "^3.7.1"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = ["E402", "E501", "E712", "B905", "F841"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = [
+	"unit: fast, isolated tests",
+	"integration: tests that touch database/file boundaries",
+	"e2e: end-to-end behavior tests",
+]
+addopts = "-q"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,4 @@
+[server]
+# Allow larger demo uploads for local analysis workflows.
+maxUploadSize = 1024
+maxMessageSize = 1024

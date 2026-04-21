@@ -2,6 +2,20 @@
 
 Use this checklist to satisfy class GitHub workflow requirements.
 
+## Repository and Story Setup
+
+- Create a semester project repository on GitHub (if not already created).
+- Use the `main` branch as the default branch.
+- Ensure `docs` exists.
+- Create `docs/stories`.
+- Store each user story and acceptance criteria in its own markdown file under `docs/stories`.
+- Current story files:
+  - `docs/stories/demo_ingestion.md`
+  - `docs/stories/side_round_filtering.md`
+  - `docs/stories/persistence_querying.md`
+- Push `main` to GitHub.
+- Create one GitHub issue per story where the issue body is only the story file path.
+
 ## Branching and Protection
 
 - Create `main` as protected branch.

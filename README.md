@@ -102,6 +102,64 @@ set APP_ENV=development
 - ORM models: `src/antistrat/db/models.py`
 - SQL schema export: `docs/schema.sql`
 
+## Logical Data Design
+
+```mermaid
+erDiagram
+	MAPS {
+		int map_id PK
+		string map_name UK
+		float pos_x
+		float pos_y
+		float scale
+		string radar_image_path
+	}
+
+	TEAMS {
+		int team_id PK
+		string team_name UK
+	}
+
+	PLAYERS {
+		int player_id PK
+		string steam_id UK
+		string player_name
+		int team_id FK
+	}
+
+	MATCHES {
+		int match_id PK
+		string demo_file_name
+		int map_id FK
+		datetime match_date
+	}
+
+	ROUNDS {
+		int round_id PK
+		int match_id FK
+		int round_number
+		string winner_side
+	}
+
+	TICK_DATA {
+		int tick_id PK
+		int round_id FK
+		int player_id FK
+		int tick
+		float pos_x
+		float pos_y
+		float pos_z
+		float pixel_x
+		float pixel_y
+	}
+
+	MAPS ||--o{ MATCHES : contains
+	MATCHES ||--o{ ROUNDS : has
+	TEAMS ||--o{ PLAYERS : includes
+	PLAYERS ||--o{ TICK_DATA : records
+	ROUNDS ||--o{ TICK_DATA : records
+```
+
 Since SQLite is used, Dockerized dev/test database containers are not required for this project.
 
 ## Git and Pre-Commit Quality Gates
@@ -157,7 +215,7 @@ Use any uptime monitor (for example, UptimeRobot, Better Stack, or Render health
 GET /_stcore/health
 ```
 
-and alert on non-200 responses.# cs2-antistrat
+and alert on non-200 responses.
 
 
 

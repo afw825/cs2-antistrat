@@ -1,20 +1,31 @@
 import logging
 import os
+from urllib.parse import urlparse
 
 
 def configure_sentry() -> None:
     """Initialize Sentry SDK from environment if DSN is provided."""
-    import sentry_sdk
+    logger = logging.getLogger(__name__)
+    sentry_dsn = (os.getenv("SENTRY_DSN") or "").strip()
+    if not sentry_dsn:
+        return
 
-    sentry_dsn = os.getenv("SENTRY_DSN")
-    if sentry_dsn:
+    parsed = urlparse(sentry_dsn)
+    if parsed.scheme not in {"http", "https"}:
+        logger.warning("Skipping Sentry init due to invalid DSN scheme")
+        return
+
+    try:
+        import sentry_sdk
+
         sentry_sdk.init(
             dsn=sentry_dsn,
             environment=os.getenv("APP_ENV", "development"),
             traces_sample_rate=0.0,
         )
-        logger = logging.getLogger(__name__)
         logger.info("Sentry initialized")
+    except Exception:
+        logger.exception("Failed to initialize Sentry; continuing without it")
 
 
 def configure_logging() -> None:

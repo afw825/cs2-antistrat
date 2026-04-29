@@ -7,6 +7,7 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir poetry==1.8.3
 
+COPY .streamlit /app/.streamlit
 COPY pyproject.toml poetry.lock README.md /app/
 COPY src /app/src
 COPY data /app/data

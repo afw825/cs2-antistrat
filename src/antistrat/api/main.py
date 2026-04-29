@@ -8,7 +8,6 @@ from pathlib import Path
 from uuid import uuid4
 
 import pandas as pd
-import sentry_sdk
 import streamlit as st
 from sqlalchemy import text
 
@@ -23,20 +22,12 @@ from antistrat.db.session import engine, init_db, reset_db
 from antistrat.ingestion.loader import load_demo_data
 from antistrat.ingestion.parser import detect_demo_map_name, extract_ct_telemetry
 from antistrat.utils.maps import get_map_analysis_profile
-from antistrat.utils.logging_config import configure_logging
+from antistrat.utils.logging_config import configure_logging, configure_sentry
 from antistrat.viz.radar import plot_radar_positions
 
+configure_sentry()
 configure_logging()
 logger = logging.getLogger(__name__)
-
-sentry_dsn = os.getenv("SENTRY_DSN")
-if sentry_dsn:
-    sentry_sdk.init(
-        dsn=sentry_dsn,
-        environment=os.getenv("APP_ENV", "development"),
-        traces_sample_rate=0.0,
-    )
-    logger.info("Sentry initialized for Streamlit app")
 
 # Initialize the database tables if they don't exist yet
 init_db()

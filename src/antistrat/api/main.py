@@ -1,7 +1,6 @@
 # src/antistrat/api/main.py
 import inspect
 import logging
-import os
 import re
 import sys
 from pathlib import Path
@@ -21,8 +20,8 @@ sys.path.insert(0, src_root_str)
 from antistrat.db.session import engine, init_db, reset_db
 from antistrat.ingestion.loader import load_demo_data
 from antistrat.ingestion.parser import detect_demo_map_name, extract_ct_telemetry
-from antistrat.utils.maps import get_map_analysis_profile
 from antistrat.utils.logging_config import configure_logging, configure_sentry
+from antistrat.utils.maps import get_map_analysis_profile
 from antistrat.viz.radar import plot_radar_positions
 
 configure_sentry()

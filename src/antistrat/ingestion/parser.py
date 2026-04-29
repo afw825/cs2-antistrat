@@ -485,7 +485,9 @@ def derive_spawn_anchor_points(
 
     start_ticks = work["round_number"].map(round_start_by_number)
     anchor_window_ticks = max(int(anchor_window_seconds), 1) * TICKRATE
-    in_anchor_window = (work["tick"] >= start_ticks) & (work["tick"] <= (start_ticks + anchor_window_ticks))
+    in_anchor_window = (work["tick"] >= start_ticks) & (
+        work["tick"] <= (start_ticks + anchor_window_ticks)
+    )
     early = work[in_anchor_window].copy()
     if early.empty:
         return pd.DataFrame(columns=["X", "Y"])
@@ -507,7 +509,9 @@ def filter_spawn_proximity_points(
     radius_sq = float(radius_units) ** 2
     mask = pd.Series(False, index=ticks_df.index)
     for anchor in spawn_anchors_df.itertuples(index=False):
-        dist_sq = (ticks_df["X"] - float(anchor.X)).pow(2) + (ticks_df["Y"] - float(anchor.Y)).pow(2)
+        dist_sq = (ticks_df["X"] - float(anchor.X)).pow(2) + (ticks_df["Y"] - float(anchor.Y)).pow(
+            2
+        )
         mask = mask | (dist_sq <= radius_sq)
 
     filtered = ticks_df[~mask].copy()
@@ -515,9 +519,6 @@ def filter_spawn_proximity_points(
     if dropped > 0:
         logger.info("Dropped spawn-proximity ticks rows=%s radius=%s", dropped, radius_units)
     return filtered
-
-
-
 
 
 def derive_round_windows_from_df(ticks_df: pd.DataFrame) -> list[tuple[int, int, int]]:
@@ -739,7 +740,6 @@ def extract_ct_telemetry(
         df = derive_round_numbers_from_tick_columns(df)
     # Classify rounds by economy type (pistol vs gun)
     df = classify_rounds_by_economy(df)
-
 
     round_windows = windows if windows else derive_round_windows_from_df(df)
     if exclude_spawn_locations:

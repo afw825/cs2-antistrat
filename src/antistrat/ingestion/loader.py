@@ -78,9 +78,7 @@ def load_demo_data(demo_file_name: str, map_name: str, df: pd.DataFrame):
             match_ids = [m.match_id for m in existing_matches]
             round_ids = [
                 rid
-                for (rid,) in db.query(Round.round_id)
-                .filter(Round.match_id.in_(match_ids))
-                .all()
+                for (rid,) in db.query(Round.round_id).filter(Round.match_id.in_(match_ids)).all()
             ]
 
             if round_ids:

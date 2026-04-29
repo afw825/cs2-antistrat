@@ -21,8 +21,13 @@ sys.path.insert(0, src_root_str)
 from antistrat.db.session import engine, init_db, reset_db
 from antistrat.ingestion.loader import load_demo_data
 from antistrat.ingestion.parser import detect_demo_map_name, extract_ct_telemetry
+<<<<<<< HEAD
 from antistrat.utils.maps import get_map_analysis_profile
 from antistrat.utils.logging_config import configure_logging, configure_sentry
+=======
+from antistrat.utils.logging_config import configure_logging
+from antistrat.utils.maps import get_map_analysis_profile
+>>>>>>> 00a026df8e8c626ebe2c6d6afc32c9312919cfa5
 from antistrat.viz.radar import plot_radar_positions
 
 configure_sentry()
@@ -198,7 +203,9 @@ def filter_rows_to_selected_team(parsed_df: pd.DataFrame, selected_team_name: st
     if not canonical_target:
         return parsed_df
 
-    team_columns = [col for col in ("team_clan_name", "clan_name", "team_name") if col in parsed_df.columns]
+    team_columns = [
+        col for col in ("team_clan_name", "clan_name", "team_name") if col in parsed_df.columns
+    ]
     if not team_columns:
         return parsed_df
 
@@ -210,8 +217,11 @@ def filter_rows_to_selected_team(parsed_df: pd.DataFrame, selected_team_name: st
     filtered = parsed_df[mask].copy()
     dropped = int(len(parsed_df) - len(filtered))
     if dropped > 0:
-        logger.info("Dropped non-selected-team rows=%s selected_team=%s", dropped, selected_team_name)
+        logger.info(
+            "Dropped non-selected-team rows=%s selected_team=%s", dropped, selected_team_name
+        )
     return filtered
+
 
 # --- Sidebar: File Upload & Ingestion ---
 with st.sidebar:
@@ -311,9 +321,7 @@ with st.sidebar:
                     "opening_start_seconds_after_round_start"
                 ],
                 "opening_seconds_cap": pending_ingestion["opening_seconds_cap"],
-                "max_velocity_units_per_second": pending_ingestion[
-                    "max_velocity_units_per_second"
-                ],
+                "max_velocity_units_per_second": pending_ingestion["max_velocity_units_per_second"],
                 "round_economy_filter": pending_ingestion["round_economy_filter"],
                 "parsed_tick_count": len(pending_ingestion["df_telemetry"]),
                 "parsed_rounds": parsed_rounds,
@@ -471,12 +479,17 @@ with st.sidebar:
                     need_team_selection = True
                 else:
                     if team_candidates:
-                        if not any(team_identities_match(locked_team_name, candidate) for candidate in team_candidates):
+                        if not any(
+                            team_identities_match(locked_team_name, candidate)
+                            for candidate in team_candidates
+                        ):
                             raise ValueError(
                                 "All ingested demos must be from the same team. "
                                 f"Locked team is '{locked_team_name}', but this demo exposed team names {team_candidates[:6]}."
                             )
-                    elif not team_identities_match(locked_team_name, ",".join(fallback_team_signature)):
+                    elif not team_identities_match(
+                        locked_team_name, ",".join(fallback_team_signature)
+                    ):
                         raise ValueError(
                             "All ingested demos must be from the same team. "
                             f"Locked team is '{locked_team_name}', but this demo could not resolve a matching team name."
